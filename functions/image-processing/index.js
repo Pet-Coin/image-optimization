@@ -6,7 +6,7 @@ const https = require('https');
 const Sharp = require('sharp');
 
 const S3 = new AWS.S3({signatureVersion: 'v4',httpOptions: {agent: new https.Agent({keepAlive: true})}}); 
-const S3_ORIGINAL_IMAGE_BUCKET = process.env.originalImageBucketName; 
+const S3_ORIGINAL_IMAGE_BUCKET = 'pets-love-product-images';
 const S3_TRANSFORMED_IMAGE_BUCKET = process.env.transformedImageBucketName; 
 const TRANSFORMED_IMAGE_CACHE_TTL = process.env.transformedImageCacheTTL;
 const SECRET_KEY = process.env.secretKey;

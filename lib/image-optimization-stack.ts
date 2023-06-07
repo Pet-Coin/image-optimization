@@ -18,7 +18,7 @@ const ORIGIN_SHIELD_MAPPING = new Map([['af-south-1', 'eu-west-2'], [ 'ap-east-1
 // related to architecture. If set to false, transformed images are not stored in S3, and all image requests land on Lambda
 var STORE_TRANSFORMED_IMAGES = 'true';
 // Parameters of S3 bucket where original images are stored
-var S3_IMAGE_BUCKET_NAME:string;
+var S3_IMAGE_BUCKET_NAME:string = 'pets-love-product-images';
 // CloudFront parameters
 var CLOUDFRONT_ORIGIN_SHIELD_REGION = ORIGIN_SHIELD_MAPPING.get(process.env.AWS_REGION || process.env.CDK_DEFAULT_REGION || 'us-east-1');
 var CLOUDFRONT_CORS_ENABLED = 'true';
@@ -83,7 +83,7 @@ export class ImageOptimizationStack extends Stack {
         enforceSSL: true,
         autoDeleteObjects: true, 
       });
-      new s3deploy.BucketDeployment(this, 'DeployWebsite', {
+      /*new s3deploy.BucketDeployment(this, 'DeployWebsite', {
         sources: [s3deploy.Source.asset('./image-sample')],
         destinationBucket: originalImageBucket,
         destinationKeyPrefix: 'images/rio/',
@@ -111,7 +111,7 @@ export class ImageOptimizationStack extends Stack {
       new CfnOutput(this, 'SampleWebsiteS3Bucket', {
         description: 'S3 bucket use by the sample website',
         value: sampleWebsiteBucket.bucketName
-      });  
+      });  */
       new CfnOutput(this, 'OriginalImagesS3Bucket', {
         description: 'S3 bucket where original images are stored',
         value: originalImageBucket.bucketName
@@ -151,7 +151,7 @@ export class ImageOptimizationStack extends Stack {
 
     // Create Lambda for image processing
     var lambdaProps = {
-      runtime: lambda.Runtime.NODEJS_16_X, 
+      runtime: lambda.Runtime.NODEJS_18_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('functions/image-processing'),
       timeout: Duration.seconds(parseInt(LAMBDA_TIMEOUT)),
